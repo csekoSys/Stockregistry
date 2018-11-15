@@ -41,6 +41,10 @@ public class DatabaseHandler {
         return handler;
     }
 
+    public Connection getConnection() {
+        return conn;
+    }
+
     private void createConnection() {
         try {
             conn = DriverManager.getConnection(DB_URL);
@@ -63,7 +67,7 @@ public class DatabaseHandler {
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
                         + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "part_categories_id INTEGER,\n"
+                        + "part_category_id INTEGER,\n"
                         + "name VARCHAR(255),\n"
                         + "barcode VARCHAR(255),\n"
                         + "place VARCHAR(255),\n"
@@ -145,13 +149,13 @@ public class DatabaseHandler {
 
     private void createStockMovementTypesTable() {
         String TABLE_NAME = "stock_movement_types";
-        
+
         try {
             stmt = conn.createStatement();
             DatabaseMetaData dbm = conn.getMetaData();
             ResultSet tables = dbm.getTables(null, null, TABLE_NAME.toUpperCase(), null);
-            
-            if(tables.next()) {
+
+            if (tables.next()) {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
@@ -159,21 +163,65 @@ public class DatabaseHandler {
                         + "new INTEGER(1),\n"
                         + "waster INTEGER(1),\n"
                         + "name VARCHAR(255),\n"
-                        + "increase INTEGER(2),\n"                        
+                        + "increase INTEGER(2),\n"
                         + "prefix VARCHAR(255)\n"
                         + ")");
             }
-            
+
         } catch (SQLException ex) {
             System.err.println("Hiba: " + ex);
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
 
     private void createStockMovementsTable() {
+        String TABLE_NAME = "stock_movements";
+
+        try {
+            stmt = conn.createStatement();
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet tables = dbm.getTables(null, null, TABLE_NAME.toUpperCase(), null);
+
+            if (tables.next()) {
+                System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
+            } else {
+                stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
+                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "identification VARCHAR(255),\n"
+                        + "partner_id INTEGER,\n"
+                        + "stock_movement_type_id INTEGER,\n"
+                        + "transfering VARCHAR(255),\n"
+                        + "recipient VARCHAR(255),\n"
+                        + "comment VARCHAR(255),\n"
+                        + "date DATETIME\n"
+                        + ")");
+            }
+
+        } catch (SQLException ex) {
+        }
     }
 
     private void createStockMoventItemsTable() {
+        String TABLE_NAME = "stock_movement_id";
+
+        try {
+            stmt = conn.createStatement();
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet tables = dbm.getTables(null, null, TABLE_NAME.toUpperCase(), null);
+
+            if (tables.next()) {
+                System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
+            } else {
+                stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
+                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "stock_movement_id INTEGER,\n"
+                        + "part_id INTEGER,\n"
+                        + "quntity INTEGER\n"
+                        + ")");
+            }
+
+        } catch (SQLException ex) {
+        }
     }
 
     public ResultSet execQuery(String query) {

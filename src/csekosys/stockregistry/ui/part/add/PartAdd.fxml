@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.geometry.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="500.0" prefWidth="450.0" stylesheets="@../../../resources/default.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csekosys.stockregistry.ui.part.add.PartAddController">
+   <children>
+      <VBox layoutX="227.0" layoutY="35.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="34.0" prefWidth="450.0">
+               <children>
+                  <JFXComboBox fx:id="cashregisterCategoryComboBox" focusColor="#37474f" labelFloat="true" prefHeight="25.0" prefWidth="383.0" promptText="Alkatrész kategória" />
+                  <JFXButton onAction="#handleAddNewPartCategoryAction" text="+">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
+               </VBox.margin>
+            </HBox>
+            <JFXTextField fx:id="nameTextField" focusColor="#37474f" labelFloat="true" promptText="Név">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="barcodeTextField" focusColor="#37474f" labelFloat="true" promptText="Vonalkód">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="palceTextField" focusColor="#37474f" labelFloat="true" promptText="Megtalálható">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXTextArea fx:id="commentTextArea" focusColor="#37474f" labelFloat="true" promptText="Megjegyzés">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </JFXTextArea>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+               <children>
+                  <JFXButton onAction="#handleAddAndCancelAction" prefHeight="50.0" prefWidth="200.0" text="Ment és kilép" />
+                  <JFXButton onAction="#handleAddAndNewAction" prefHeight="50.0" prefWidth="200.0" text="Ment és új" />
+                  <JFXButton onAction="#hangleCancelAction" prefHeight="50.0" prefWidth="200.0" text="Kilép" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
