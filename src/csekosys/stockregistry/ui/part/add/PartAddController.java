@@ -68,8 +68,8 @@ public class PartAddController implements Initializable {
     }
 
     private void addPart() {
-        int cashregisterTypeId = 1;
-        //       int cashregisterTypeId = cashregisterCategoryComboBox.getSelectionModel().getSelectedItem().getId();
+//        int cashregisterTypeId = 1;
+        int cashregisterTypeId = cashregisterCategoryComboBox.getSelectionModel().getSelectedItem().getId();
         System.out.println("csekosys.stockregistry.ui.part.add.PartAddController.addPart() cashregisterTypeId: " + cashregisterTypeId);
         String name = nameTextField.getText();
         String barcode = barcodeTextField.getText();
@@ -81,14 +81,13 @@ public class PartAddController implements Initializable {
     }
 
     private void initPartCategoriesComboBox() {
-        loadPartCategory();
+        partCategoriesList = DatabaseHelper.findAllPartCategories();
         cashregisterCategoryComboBox.setItems(partCategoriesList);
 
     }
 
     private void loadPartCategory() {
 
-        partCategoriesList = (ObservableList<PartCategory>) DatabaseHelper.findAllPartCategories();
 
         /*
         String query = "SELECT * FROM part_categories";

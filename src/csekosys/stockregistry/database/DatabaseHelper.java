@@ -56,8 +56,8 @@ public class DatabaseHelper {
         }
     }
     
-    public static List<PartCategory> findAllPartCategories() {
-        List list = new ArrayList();
+    public static ObservableList<PartCategory> findAllPartCategories() {
+        ObservableList<PartCategory> list = FXCollections.observableArrayList();
 
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         String query = "SELECT * FROM part_categories";
