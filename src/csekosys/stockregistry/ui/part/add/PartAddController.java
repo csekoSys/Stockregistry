@@ -68,13 +68,16 @@ public class PartAddController implements Initializable {
     }
 
     private void addPart() {
-//        int cashregisterTypeId = 1;
         int cashregisterTypeId = cashregisterCategoryComboBox.getSelectionModel().getSelectedItem().getId();
         System.out.println("csekosys.stockregistry.ui.part.add.PartAddController.addPart() cashregisterTypeId: " + cashregisterTypeId);
         String name = nameTextField.getText();
         String barcode = barcodeTextField.getText();
         String place = palceTextField.getText();
         String comment = commentTextArea.getText();
+        
+        if(name.isEmpty() || cashregisterTypeId == null) {
+            
+        }
 
         Part part = new Part(cashregisterTypeId, name, barcode, place, comment);
         DatabaseHelper.insertNewPart(part);
@@ -86,36 +89,14 @@ public class PartAddController implements Initializable {
 
     }
 
-    private void loadPartCategory() {
-
-
-        /*
-        String query = "SELECT * FROM part_categories";
-        ResultSet rs = databaseHandler.execQuery(query);
-
-        try {
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String comment = rs.getString("comment");
-
-                partCategoriesList.add(new PartCategory(id, name, comment));
-            }
-        } catch (SQLException ex) {
-            System.err.println("Hiba a loadPartCategory közben: " + ex);
-        }
-        
-        System.out.println("csekosys.stockregistry.ui.part.add.PartAddController.loadPartCategory() MÉRET: "  + partCategoriesList.size());
-         */
-    }
-
     private void cancel() {
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
 
     private void clearFields() {
-        //       cashregisterCategoryComboBox.
+        cashregisterCategoryComboBox.getSelectionModel().clearSelection();
+        cashregisterCategoryComboBox.getItems().clear();
         nameTextField.clear();
         barcodeTextField.clear();
         palceTextField.clear();
