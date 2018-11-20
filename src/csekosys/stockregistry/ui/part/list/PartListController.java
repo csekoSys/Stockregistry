@@ -52,27 +52,21 @@ public class PartListController implements Initializable {
     private void loadPartData() {
 //        partList.clear();
         databaseHandler = DatabaseHandler.getInstance();
-        //       partList = DatabaseHelper.findAllParts();
         
 
-        String query = "SELECT parts.id, parts.name, part_categories.name, parts.place "
-                + "FROM parts"
-                + "INNER JOIN part_categories"
-                + "ON parts.part_category_id=part_categories.id";
+        String query = "SELECT parts.partId, parts.partName, partCategories.partCategoryName, parts.partPlace "
+                + "FROM parts "
+                + "INNER JOIN partCategories "
+                + "ON parts.partCategoryId=partCategories.partCategoryId";
         
         ResultSet rs = databaseHandler.execQuery(query);
         try {
             while (rs.next()) {
-                int id = rs.getInt("id");
-//                int partCategoryId = rs.getInt("part_category_id");
-                String name = rs.getString("name");
- //               String barcode = rs.getString("barcode");
-                String partCategoryName = rs.getString("name");
-                String place = rs.getString("place");
- //               String comment = rs.getString("comment");
+                int id = rs.getInt("partId");
+                String name = rs.getString("partName");
+                String partCategoryName = rs.getString("partCategoryName");
+                String place = rs.getString("partPlace");
 
- 
-                System.out.println("id: " + id + " name: " + name + " partCategoryName: " + partCategoryName + " place: " + place);
  //               partList.add(new Part(id, partCategoryId, name, barcode, place, comment));
             }
         } catch (SQLException ex) {

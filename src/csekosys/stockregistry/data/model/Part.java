@@ -3,27 +3,30 @@ package csekosys.stockregistry.data.model;
 public class Part {
 
     private int id;
-    private int partCategoryId;
+    private PartCategory partCategory;
     private String name;
     private String barcode;
     private String place;
     private String comment;
-    
-    public Part(int partCategoryId, String name, String barcode, String place, String comment) {
-        this.partCategoryId = partCategoryId;
+    private boolean active;
+
+    public Part(PartCategory partCategory, String name, String barcode, String place, String comment, boolean active) {
+        this.partCategory = partCategory;
         this.name = name;
         this.barcode = barcode;
         this.place = place;
         this.comment = comment;
+        this.active = active;
     }
-    
-    public Part(int id, int partCategoryId, String name, String barcode, String place, String comment) {
+
+    public Part(int id, PartCategory partCategory, String name, String barcode, String place, String comment, boolean active) {
         this.id = id;
-        this.partCategoryId = partCategoryId;
+        this.partCategory = partCategory;
         this.name = name;
         this.barcode = barcode;
         this.place = place;
         this.comment = comment;
+        this.active = active;
     }
 
     public int getId() {
@@ -34,12 +37,12 @@ public class Part {
         this.id = id;
     }
 
-    public int getPartCategoryId() {
-        return partCategoryId;
+    public PartCategory getPartCategory() {
+        return partCategory;
     }
 
-    public void setPartCategoryId(int partCategoryId) {
-        this.partCategoryId = partCategoryId;
+    public void setPartCategory(PartCategory partCategory) {
+        this.partCategory = partCategory;
     }
 
     public String getName() {
@@ -73,7 +76,14 @@ public class Part {
     public void setComment(String comment) {
         this.comment = comment;
     }
-    
-    
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    
 }

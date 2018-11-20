@@ -1,6 +1,7 @@
 package csekosys.stockregistry.ui.part.add;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -17,12 +18,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+
 import javafx.stage.Stage;
 
 public class PartAddController implements Initializable {
@@ -48,6 +45,8 @@ public class PartAddController implements Initializable {
     private JFXButton addAndNewButton;
     @FXML
     private JFXButton cancelButton;
+    @FXML
+    private JFXCheckBox activeCheckBox;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -87,6 +86,7 @@ public class PartAddController implements Initializable {
         String barcode = barcodeTextField.getText();
         String place = palceTextField.getText();
         String comment = commentTextArea.getText();
+        boolean active = activeCheckBox.isSelected();
 
         boolean flag = isSelecktedPartType || name.isEmpty();
 
@@ -94,7 +94,7 @@ public class PartAddController implements Initializable {
             DialogMaker.showErrorAlert("Hiba", null, "A csilagozot mezők kitöltése kötelező!");
         } else {
             int cashregisterTypeId = partCategoryComboBox.getSelectionModel().getSelectedItem().getId();
-            Part part = new Part(cashregisterTypeId, name, barcode, place, comment);
+            Part part = new Part(cashregisterTypeId, name, barcode, place, comment,active);
             DatabaseHelper.insertNewPart(part);
         }
 
@@ -118,6 +118,7 @@ public class PartAddController implements Initializable {
         barcodeTextField.clear();
         palceTextField.clear();
         commentTextArea.clear();
+        activeCheckBox.setSelected(true);
     }
 
 }

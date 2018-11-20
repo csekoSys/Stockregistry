@@ -10,19 +10,20 @@ public class TestMain {
     public static void main(String[] args) {
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();       
 
-        String query = "SELECT parts.id, parts.name, part_categories.namee, parts.place "
+        String query = "SELECT parts.partId, parts.partName, partCategories.partCategoryName, parts.partPlace "
                 + "FROM parts "
-                + "INNER JOIN part_categories "
-                + "ON parts.part_category_id=part_categories.id";
+                + "INNER JOIN partCategories "
+                + "ON parts.partCategoryId=partCategories.partCategoryId";
+        
+        System.out.println("query: " + query);
         
         ResultSet rs = databaseHandler.execQuery(query);
         try {
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String partCategoryName = rs.getString("namee");
- //               String partCategoryName = rs.getString("part_categories.name");
-                String place = rs.getString("place");
+                int id = rs.getInt("partId");
+                String name = rs.getString("partName");
+                String partCategoryName = rs.getString("partCategoryName");
+                String place = rs.getString("partPlace");
 
  
                 System.out.println("\n\nid: " + id + "\nname: " + name + "\npartCategoryName: " + partCategoryName + "\nplace: " + place);

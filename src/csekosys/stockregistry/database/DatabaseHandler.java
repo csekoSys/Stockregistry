@@ -52,7 +52,6 @@ public class DatabaseHandler {
         } catch (SQLException ex) {
             DialogMaker.showErrorAlert("SQLException", null, ex.getMessage());
         }
-        System.out.println("csekosys.stockregistry.database.DatabaseHandler.createConnection()");
     }
 
     private void createPartsTable() {
@@ -67,12 +66,13 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "part_category_id INTEGER,\n"
-                        + "name VARCHAR(255),\n"
-                        + "barcode VARCHAR(255),\n"
-                        + "place VARCHAR(255),\n"
-                        + "comment VARCHAR(255)\n"
+                        + "partId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "partCategoryId INTEGER,\n"
+                        + "partName VARCHAR(255),\n"
+                        + "partBarcode VARCHAR(255),\n"
+                        + "partPlace VARCHAR(255),\n"
+                        + "partComment VARCHAR(255),\n"
+                        + "partActive INTEGER(1) DEFAULT 1\n"
                         + ")");
             }
 
@@ -81,7 +81,7 @@ public class DatabaseHandler {
     }
 
     private void createPartCategoriesTable() {
-        String TABLE_NAME = "part_categories";
+        String TABLE_NAME = "partCategories";
 
         try {
             stmt = conn.createStatement();
@@ -92,9 +92,10 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "name VARCHAR(255),\n"
-                        + "comment VARCHAR(255)\n"
+                        + "partCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "partCategoryName VARCHAR(255),\n"
+                        + "partCategoryComment VARCHAR(255),\n"
+                        + "partCategoryActive INTEGER(1) DEFAULT 1\n"
                         + ")");
             }
 
@@ -105,7 +106,7 @@ public class DatabaseHandler {
     }
 
     private void createCashregisterTypesTable() {
-        String TABLE_NAME = "cashregister_types";
+        String TABLE_NAME = "cashregisterTypes";
 
         try {
             stmt = conn.createStatement();
@@ -116,10 +117,10 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "licensenumber VARCHAR(255),\n"
-                        + "name VARCHAR(255),\n"
-                        + "active INTEGER(1) DEFAULT 1\n"
+                        + "cashregisterTypeId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "cashregisterTypeLicenseNumber VARCHAR(255),\n"
+                        + "cashregisterTypeName VARCHAR(255),\n"
+                        + "cashregisterTypeActive INTEGER(1) DEFAULT 1\n"
                         + ")");
             }
 
@@ -139,9 +140,10 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "name VARCHAR(255),\n"
-                        + "address VARCHAR(255)\n"
+                        + "partnerId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "partnerName VARCHAR(255),\n"
+                        + "partnerAddress VARCHAR(255),\n"
+                        + "partnerActive INTEGER(1)\n"
                         + ")");
             }
 
@@ -150,7 +152,7 @@ public class DatabaseHandler {
     }
 
     private void createStockMovementTypesTable() {
-        String TABLE_NAME = "stock_movement_types";
+        String TABLE_NAME = "stockMovementTypes";
 
         try {
             stmt = conn.createStatement();
@@ -161,12 +163,12 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "new INTEGER(1),\n"
-                        + "waster INTEGER(1),\n"
-                        + "name VARCHAR(255),\n"
-                        + "increase INTEGER(2),\n"
-                        + "prefix VARCHAR(255)\n"
+                        + "stockMovementTypeId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "stockMovementTypeNew INTEGER(1),\n"
+                        + "stockMovementTypeName VARCHAR(255),\n"
+                        + "stockMovementTypeIncrease INTEGER(2),\n"
+                        + "stockMovementTypePrefix VARCHAR(255),\n"
+                        + "stockMovementTypeActive INTEGER(1)\n"
                         + ")");
             }
 
@@ -177,7 +179,7 @@ public class DatabaseHandler {
     }
 
     private void createStockMovementsTable() {
-        String TABLE_NAME = "stock_movements";
+        String TABLE_NAME = "stockMovements";
 
         try {
             stmt = conn.createStatement();
@@ -188,14 +190,14 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "identification VARCHAR(255),\n"
-                        + "partner_id INTEGER,\n"
-                        + "stock_movement_type_id INTEGER,\n"
-                        + "transfering VARCHAR(255),\n"
-                        + "recipient VARCHAR(255),\n"
-                        + "comment VARCHAR(255),\n"
-                        + "date DATETIME\n"
+                        + "stockMovementId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "stockMovementIdentification VARCHAR(255),\n"
+                        + "partnerId INTEGER,\n"
+                        + "stockMovementTypeId INTEGER,\n"
+                        + "stockMovementTransfering VARCHAR(255),\n"
+                        + "stockMovementRecipient VARCHAR(255),\n"
+                        + "stockMovementComment VARCHAR(255),\n"
+                        + "stockMovementDate DATETIME\n"
                         + ")");
             }
 
@@ -204,7 +206,7 @@ public class DatabaseHandler {
     }
 
     private void createStockMoventItemsTable() {
-        String TABLE_NAME = "stock_movement";
+        String TABLE_NAME = "stockMovementItems";
 
         try {
             stmt = conn.createStatement();
@@ -215,19 +217,19 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "stock_movement_id INTEGER,\n"
-                        + "part_id INTEGER,\n"
-                        + "quntity INTEGER\n"
+                        + "stockMovementItemId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "stockMovementId INTEGER,\n"
+                        + "partId INTEGER,\n"
+                        + "stockMovementItemQuntity INTEGER\n"
                         + ")");
             }
 
         } catch (SQLException ex) {
         }
     }
-    
+
     private void createCashregisterPartNumbersTable() {
-        String TABLE_NAME = "cashregister_part_numbers";
+        String TABLE_NAME = "cashregisterPartNumbers";
 
         try {
             stmt = conn.createStatement();
@@ -238,10 +240,10 @@ public class DatabaseHandler {
                 System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
-                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "cashregister_type_id INTEGER,\n"
-                        + "part_id INTEGER,\n"
-                        + "part_quntity INTEGER DEFAULT 0\n"
+                        + "cashregisterPartNumberId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "cashregisterTypeId INTEGER,\n"
+                        + "partId INTEGER,\n"
+                        + "cashregisterPartNumberPartQuntity INTEGER DEFAULT 0\n"
                         + ")");
             }
 

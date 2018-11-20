@@ -5,14 +5,16 @@ public class PartCategory {
     private int id;
     private String name;
     private String comment;
+    private boolean active;
 
     public PartCategory() {
     }
 
-    public PartCategory(int id, String name, String comment) {
+    public PartCategory(int id, String name, String comment, boolean active) {
         this.id = id;
         this.name = name;
         this.comment = comment;
+        this.active = active;
     }
 
     public int getId() {
@@ -38,6 +40,16 @@ public class PartCategory {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
+    
 
     @Override
     public String toString() {

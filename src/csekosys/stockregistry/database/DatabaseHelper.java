@@ -7,10 +7,6 @@ import csekosys.stockregistry.tools.DialogMaker;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -18,17 +14,18 @@ public class DatabaseHelper {
 
     public static boolean insertNewPart(Part part) {
         try {
-            String sql = "INSERT INTO parts(part_category_id,name,barcode,place,comment) VALUES(?,?,?,?,?)";
+            String sql = "INSERT INTO parts(partCategoryId,partName,partBarcode,partPlace,partComment,partActive) VALUES(?,?,?,?,?,?)";
             PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(sql);
-            statement.setInt(1, part.getPartCategoryId());
+            statement.setInt(1, part.getPartCategory().getId());
             statement.setString(2, part.getName());
             statement.setString(3, part.getBarcode());
             statement.setString(4, part.getPlace());
             statement.setString(5, part.getComment());
+            statement.setBoolean(6, part.isActive());
             return statement.executeUpdate() > 0;
         } catch (SQLException ex) {
             DialogMaker.showErrorAlert("Hiba", "Az alkatrész beszúrása nem sikerült", ex.getLocalizedMessage());
-            System.err.println("Hiba az alkatrés beszúrása közben: " + ex);
+            System.err.println("Hiba az alkatrész beszúrása közben: " + ex);
         }
         return false;
     }
@@ -42,13 +39,14 @@ public class DatabaseHelper {
         try {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int partCategoryId = rs.getInt("part_category_id");
-                String name = rs.getString("name");
-                String barcode = rs.getString("barcode");
-                String place = rs.getString("place");
-                String comment = rs.getString("comment");
+                int partCategoryId = rs.getInt("partCategoryId");
+                String name = rs.getString("partName");
+                String barcode = rs.getString("partbarcode");
+                String place = rs.getString("partPlace");
+                String comment = rs.getString("partComment");
+                boolean active = rs.getBoolean("partActive");
 
-                list.add(new Part(id, partCategoryId, name, barcode, place, comment));
+                list.add(new Part(id, partCategoryId, name, barcode, place, comment,active));
             }
             return list;
         } catch (SQLException ex) {
@@ -61,15 +59,16 @@ public class DatabaseHelper {
         ObservableList<PartCategory> list = FXCollections.observableArrayList();
 
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-        String query = "SELECT * FROM part_categories";
+        String query = "SELECT * FROM partCategories";
         ResultSet rs = databaseHandler.execQuery(query);
         try {
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String comment = rs.getString("comment");
+                int id = rs.getInt("partCategoryId");
+                String name = rs.getString("partCategoryName");
+                String comment = rs.getString("partCategoryComment");
+                boolean active = rs.getBoolean("partCategoryActive");
 
-                list.add(new PartCategory(id, name, comment));
+                list.add(new PartCategory(id, name, comment,active));
             }
             return list;
         } catch (SQLException ex) {
@@ -77,7 +76,7 @@ public class DatabaseHelper {
             return null;
         }
     }
-
+/*
     public static PartCategory getOnePartCategory(int partCategoryId) {
         PartCategory partCategory = null;
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
@@ -97,7 +96,7 @@ public class DatabaseHelper {
         }
         return partCategory;
     }
-
+*/
     public static ObservableList<CashregisterType> findAllCashregisterTypes() {
         ObservableList<CashregisterType> list = FXCollections.observableArrayList();
 
