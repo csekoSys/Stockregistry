@@ -1,5 +1,6 @@
 package csekosys.stockregistry.database;
 
+import csekosys.stockregistry.data.model.CashregisterType;
 import csekosys.stockregistry.data.model.Part;
 import csekosys.stockregistry.data.model.PartCategory;
 import csekosys.stockregistry.tools.DialogMaker;
@@ -32,8 +33,8 @@ public class DatabaseHelper {
         return false;
     }
 
-    public static List<Part> findAllParts() {
-        List list = new ArrayList();
+    public static ObservableList<Part> findAllParts() {
+        ObservableList list = FXCollections.observableArrayList();
 
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         String query = "SELECT * FROM parts";
@@ -55,7 +56,7 @@ public class DatabaseHelper {
             return null;
         }
     }
-    
+
     public static ObservableList<PartCategory> findAllPartCategories() {
         ObservableList<PartCategory> list = FXCollections.observableArrayList();
 
@@ -73,6 +74,47 @@ public class DatabaseHelper {
             return list;
         } catch (SQLException ex) {
             DialogMaker.showErrorAlert("Hiba", "Az alkatrész típusok listába írása nem sikerült", ex.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static PartCategory getOnePartCategory(int partCategoryId) {
+        PartCategory partCategory = null;
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        String query = "SELECT * FROM part_categories WHERE id=" + partCategoryId;
+        ResultSet rs = databaseHandler.execQuery(query);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String comment = rs.getString("comment");
+                partCategory = new PartCategory(id, name, comment);
+                return partCategory;
+            }
+        } catch (SQLException ex) {
+            DialogMaker.showErrorAlert("Hiba", "Az alkatrész típusok listába írása nem sikerült", ex.getLocalizedMessage());
+            return null;
+        }
+        return partCategory;
+    }
+
+    public static ObservableList<CashregisterType> findAllCashregisterTypes() {
+        ObservableList<CashregisterType> list = FXCollections.observableArrayList();
+
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        String query = "SELECT * FROM cashregister_types";
+        ResultSet rs = databaseHandler.execQuery(query);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String licenseNumber = rs.getString("licensenumber");
+                String name = rs.getString("name");
+
+                list.add(new CashregisterType(id, licenseNumber, name));
+            }
+            return list;
+        } catch (SQLException ex) {
+            DialogMaker.showErrorAlert("Hiba", "Az pénztárgép típusok listába írása nem sikerült", ex.getLocalizedMessage());
             return null;
         }
     }

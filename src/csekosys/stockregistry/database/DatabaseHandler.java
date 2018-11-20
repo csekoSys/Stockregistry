@@ -24,6 +24,7 @@ public class DatabaseHandler {
         createPartsTable();
         createPartCategoriesTable();
         createCashregisterTypesTable();
+        createCashregisterPartNumbersTable();
 
         createPartnersTable();
 
@@ -117,7 +118,8 @@ public class DatabaseHandler {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
                         + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                         + "licensenumber VARCHAR(255),\n"
-                        + "name VARCHAR(255)\n"
+                        + "name VARCHAR(255),\n"
+                        + "active INTEGER(1) DEFAULT 1\n"
                         + ")");
             }
 
@@ -202,7 +204,7 @@ public class DatabaseHandler {
     }
 
     private void createStockMoventItemsTable() {
-        String TABLE_NAME = "stock_movement_id";
+        String TABLE_NAME = "stock_movement";
 
         try {
             stmt = conn.createStatement();
@@ -217,6 +219,29 @@ public class DatabaseHandler {
                         + "stock_movement_id INTEGER,\n"
                         + "part_id INTEGER,\n"
                         + "quntity INTEGER\n"
+                        + ")");
+            }
+
+        } catch (SQLException ex) {
+        }
+    }
+    
+    private void createCashregisterPartNumbersTable() {
+        String TABLE_NAME = "cashregister_part_numbers";
+
+        try {
+            stmt = conn.createStatement();
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet tables = dbm.getTables(null, null, TABLE_NAME.toUpperCase(), null);
+
+            if (tables.next()) {
+                System.out.println("A(z) " + TABLE_NAME + " tábla már létezik!");
+            } else {
+                stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
+                        + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                        + "cashregister_type_id INTEGER,\n"
+                        + "part_id INTEGER,\n"
+                        + "part_quntity INTEGER DEFAULT 0\n"
                         + ")");
             }
 

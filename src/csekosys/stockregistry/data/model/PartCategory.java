@@ -6,6 +6,9 @@ public class PartCategory {
     private String name;
     private String comment;
 
+    public PartCategory() {
+    }
+
     public PartCategory(int id, String name, String comment) {
         this.id = id;
         this.name = name;

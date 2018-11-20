@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="500.0" prefWidth="450.0" stylesheets="@../../../../../resources/default.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csekosys.stockregistry.ui.part.add.PartAddController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="429.0" prefWidth="450.0" stylesheets="@../../../../../resources/default.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csekosys.stockregistry.ui.part.add.PartAddController">
    <children>
       <VBox layoutX="227.0" layoutY="35.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox prefHeight="34.0" prefWidth="450.0">
                <children>
-                  <JFXComboBox fx:id="cashregisterCategoryComboBox" focusColor="#37474f" labelFloat="true" prefHeight="25.0" prefWidth="383.0" promptText="Alkatrész kategória *" />
+                  <JFXComboBox fx:id="partCategoryComboBox" focusColor="#37474f" labelFloat="true" prefHeight="25.0" prefWidth="383.0" promptText="Alkatrész kategória *" />
                   <JFXButton onAction="#handleAddNewPartCategoryAction" text="+">
                      <HBox.margin>
                         <Insets left="10.0" />
@@ -41,19 +41,19 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </JFXTextField>
-            <JFXTextArea fx:id="commentTextArea" focusColor="#37474f" labelFloat="true" promptText="Megjegyzés">
+            <JFXTextArea fx:id="commentTextArea" focusColor="#37474f" labelFloat="true" prefColumnCount="30" prefHeight="110.0" prefWidth="430.0" promptText="Megjegyzés">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </JFXTextArea>
-            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="BOTTOM_CENTER" prefHeight="52.0" prefWidth="450.0">
                <VBox.margin>
-                  <Insets top="30.0" />
+                  <Insets top="40.0" />
                </VBox.margin>
                <children>
-                  <JFXButton onAction="#handleAddAndCancelAction" prefHeight="50.0" prefWidth="300.0" text="Ment és kilép" />
-                  <JFXButton onAction="#handleAddAndNewAction" prefHeight="50.0" prefWidth="300.0" text="Ment és új" />
-                  <JFXButton onAction="#hangleCancelAction" prefHeight="50.0" prefWidth="300.0" text="Kilép" />
+                  <JFXButton fx:id="addAndCancelButton" onAction="#handleAddAndCancelAction" prefHeight="50.0" prefWidth="300.0" text="Ment és kilép" />
+                  <JFXButton fx:id="addAndNewButton" onAction="#handleAddAndNewAction" prefHeight="50.0" prefWidth="300.0" text="Ment és új" />
+                  <JFXButton fx:id="cancelButton" onAction="#hangleCancelAction" prefHeight="50.0" prefWidth="300.0" text="Kilép" />
                </children>
             </HBox>
          </children>
