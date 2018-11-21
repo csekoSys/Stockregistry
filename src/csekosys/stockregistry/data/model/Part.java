@@ -3,15 +3,17 @@ package csekosys.stockregistry.data.model;
 public class Part {
 
     private int id;
-    private PartCategory partCategory;
+    private int partCategoryId;
+    private String partCategoryName;
     private String name;
     private String barcode;
     private String place;
     private String comment;
     private boolean active;
 
-    public Part(PartCategory partCategory, String name, String barcode, String place, String comment, boolean active) {
-        this.partCategory = partCategory;
+    public Part(int id, int partCategoryId, String name, String barcode, String place, String comment, boolean active) {
+        this.id = id;
+        this.partCategoryId = partCategoryId;
         this.name = name;
         this.barcode = barcode;
         this.place = place;
@@ -19,9 +21,18 @@ public class Part {
         this.active = active;
     }
 
-    public Part(int id, PartCategory partCategory, String name, String barcode, String place, String comment, boolean active) {
+    public Part(int partCategoryId, String name, String barcode, String place, String comment, boolean active) {
+        this.partCategoryId = partCategoryId;
+        this.name = name;
+        this.barcode = barcode;
+        this.place = place;
+        this.comment = comment;
+        this.active = active;
+    }
+
+    public Part(int id, String partCategoryName, String name, String barcode, String place, String comment, boolean active) {
         this.id = id;
-        this.partCategory = partCategory;
+        this.partCategoryName = partCategoryName;
         this.name = name;
         this.barcode = barcode;
         this.place = place;
@@ -35,14 +46,6 @@ public class Part {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public PartCategory getPartCategory() {
-        return partCategory;
-    }
-
-    public void setPartCategory(PartCategory partCategory) {
-        this.partCategory = partCategory;
     }
 
     public String getName() {
@@ -85,5 +88,22 @@ public class Part {
         this.active = active;
     }
 
+    public int getPartCategoryId() {
+        return partCategoryId;
+    }
+
+    public void setPartCategoryId(int partCategoryId) {
+        this.partCategoryId = partCategoryId;
+    }
+
+    public String getPartCategoryName() {
+        return partCategoryName;
+    }
+
+    public void setPartCategoryName(String partCategoryName) {
+        this.partCategoryName = partCategoryName;
+    }
     
+    
+
 }

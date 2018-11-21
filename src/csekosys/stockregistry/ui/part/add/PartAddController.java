@@ -113,7 +113,7 @@ public class PartAddController implements Initializable {
 
     private void clearFields() {
         partCategoryComboBox.getSelectionModel().clearSelection();
-        partCategoryComboBox.getItems().clear();
+//        partCategoryComboBox.getItems().clear();
         nameTextField.clear();
         barcodeTextField.clear();
         palceTextField.clear();

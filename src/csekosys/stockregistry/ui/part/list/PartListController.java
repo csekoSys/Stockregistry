@@ -44,13 +44,13 @@ public class PartListController implements Initializable {
     private void initCol() {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        partCategoryCol.setCellValueFactory(new PropertyValueFactory<>("partCategoryId"));
+        partCategoryCol.setCellValueFactory(new PropertyValueFactory<>("partCategoryName"));
         placeCol.setCellValueFactory(new PropertyValueFactory<>("place"));
         //       functionsCol.setCellValueFactory(new PropertyValueFactory<>("id"));
     }
 
     private void loadPartData() {
-//        partList.clear();
+        partList.clear();
         databaseHandler = DatabaseHandler.getInstance();
         
 
@@ -67,13 +67,13 @@ public class PartListController implements Initializable {
                 String partCategoryName = rs.getString("partCategoryName");
                 String place = rs.getString("partPlace");
 
- //               partList.add(new Part(id, partCategoryId, name, barcode, place, comment));
+                partList.add(new Part(id, partCategoryName, name, "", place, "", true));
             }
         } catch (SQLException ex) {
             DialogMaker.showErrorAlert("Hiba", "Az alkatrészek listába írása nem sikerült", ex.getLocalizedMessage());
         }
 
- //       partsTable.setItems(partList);
+        partsTable.setItems(partList);
     }
 
 }

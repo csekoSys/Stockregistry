@@ -16,7 +16,7 @@ public class DatabaseHelper {
         try {
             String sql = "INSERT INTO parts(partCategoryId,partName,partBarcode,partPlace,partComment,partActive) VALUES(?,?,?,?,?,?)";
             PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(sql);
-            statement.setInt(1, part.getPartCategory().getId());
+            statement.setInt(1, part.getPartCategoryId());
             statement.setString(2, part.getName());
             statement.setString(3, part.getBarcode());
             statement.setString(4, part.getPlace());
