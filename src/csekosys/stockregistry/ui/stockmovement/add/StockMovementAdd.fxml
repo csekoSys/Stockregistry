@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" stylesheets="@../../../../../resources/default.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="stockMovementPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" stylesheets="@../../../../../resources/default.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csekosys.stockregistry.ui.stockmovement.add.StockMovementAddController">
    <children>
       <VBox layoutX="230.0" layoutY="145.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -24,38 +23,38 @@
                      <children>
                         <HBox prefHeight="24.0" prefWidth="250.0">
                            <children>
-                              <JFXComboBox labelFloat="true" prefHeight="26.0" prefWidth="374.0" promptText="Készletmozgás">
+                              <JFXComboBox fx:id="stockMovementTypeComboBox" labelFloat="true" prefHeight="26.0" prefWidth="374.0" promptText="Készletmozgás">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </JFXComboBox>
-                              <JFXButton text="+" />
+                              <JFXButton onAction="#handleAddStockMovementAction" text="+" />
                            </children>
                         </HBox>
                         <HBox prefHeight="38.0" prefWidth="250.0">
                            <children>
-                              <JFXComboBox labelFloat="true" prefHeight="26.0" prefWidth="618.0" promptText="Partner">
+                              <JFXComboBox fx:id="partnerComboBox" labelFloat="true" prefHeight="26.0" prefWidth="618.0" promptText="Partner">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </JFXComboBox>
-                              <JFXButton text="+" />
+                              <JFXButton onAction="#handleAddPartnerAction" text="+" />
                            </children>
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
                         </HBox>
-                        <JFXTextArea labelFloat="true" prefHeight="170.0" prefWidth="250.0" promptText="Megjegyzés">
+                        <JFXTextArea fx:id="commentTextArea" labelFloat="true" prefHeight="170.0" prefWidth="250.0" promptText="Megjegyzés">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
                         </JFXTextArea>
-                        <JFXTextField labelFloat="true" promptText="Átadó">
+                        <JFXTextField fx:id="transferringTextField" labelFloat="true" promptText="Átadó">
                            <VBox.margin>
-                              <Insets top="80.0" />
+                              <Insets top="75.0" />
                            </VBox.margin>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Átvevő">
+                        <JFXTextField fx:id="recipientTextField" labelFloat="true" promptText="Átvevő">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
@@ -69,32 +68,33 @@
                      <children>
                         <HBox alignment="TOP_CENTER" prefHeight="39.0" prefWidth="522.0">
                            <children>
-                              <JFXTextField labelFloat="true" prefHeight="26.0" prefWidth="262.0" promptText="Keres" />
+                              <JFXTextField fx:id="searchPartTextField" labelFloat="true" onAction="#hadndleSearchPartAction" prefHeight="26.0" prefWidth="262.0" promptText="Keres" />
                            </children>
                         </HBox>
-                        <TableView prefHeight="391.0">
+                        <TableView fx:id="partListTable" prefHeight="393.0" prefWidth="517.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Alkatrész" />
-                            <TableColumn prefWidth="75.0" text="Típus" />
-                              <TableColumn prefWidth="75.0" text="Készlet" />
+                            <TableColumn fx:id="partNameCol" prefWidth="75.0" text="Alkatrész" />
+                            <TableColumn fx:id="cashregisterTypeCol" prefWidth="75.0" text="Típus" />
+                              <TableColumn fx:id="quantityCol" prefWidth="75.0" text="Készlet" />
+                              <TableColumn fx:id="partFunctionsCol" prefWidth="75.0" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <HBox alignment="CENTER" prefHeight="79.0" prefWidth="522.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="79.0" prefWidth="522.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Választott alkatrész">
+                              <Text fx:id="chosenPartNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Választott alkatrész">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Text>
-                              <Spinner prefHeight="26.0" prefWidth="94.0">
+                              <Spinner fx:id="addQuantitySpinner" editable="true" prefHeight="26.0" prefWidth="94.0">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Spinner>
-                              <JFXButton text="Hozzáad" />
+                              <JFXButton onAction="#handleAddItemAction" text="Hozzáad" />
                            </children>
                         </HBox>
                      </children>
@@ -106,15 +106,15 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="398.0">
                            <children>
-                              <JFXButton text="Mindent töröl" />
+                              <JFXButton onAction="#handelDeleteAllItemAction" text="Mindent töröl" />
                            </children>
                         </HBox>
-                        <TableView prefHeight="427.0">
+                        <TableView fx:id="itemListTable" prefHeight="427.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Alkatrész" />
-                              <TableColumn prefWidth="75.0" text="Típus" />
-                            <TableColumn prefWidth="217.0" text="Mennyiség" />
-                              <TableColumn prefWidth="47.0" />
+                            <TableColumn fx:id="itemNameCol" prefWidth="75.0" text="Alkatrész" />
+                              <TableColumn fx:id="itemCashregisterTypeCol" prefWidth="75.0" text="Típus" />
+                            <TableColumn fx:id="itemQuantityCol" prefWidth="217.0" text="Mennyiség" />
+                              <TableColumn fx:id="itemFunctionsCol" prefWidth="47.0" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -129,12 +129,12 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <JFXButton prefHeight="50.0" prefWidth="200.0" text="Rögzít">
+                  <JFXButton onAction="#handleAddStockMovementAction" prefHeight="50.0" prefWidth="200.0" text="Rögzít">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton prefHeight="50.0" prefWidth="200.0" text="Kilép" />
+                  <JFXButton onAction="#handleCancelAction" prefHeight="50.0" prefWidth="200.0" text="Kilép" />
                </children>
             </HBox>
          </children>

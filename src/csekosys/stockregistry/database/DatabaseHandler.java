@@ -164,11 +164,12 @@ public class DatabaseHandler {
             } else {
                 stmt.execute("CREATE TABLE " + TABLE_NAME + " ("
                         + "stockMovementTypeId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                        + "stockMovementTypeNew INTEGER(1),\n"
+                        + "stockMovementTypeNewPart INTEGER(1),\n"
+                        + "stockMovementTypeGoodPart INTEGER(1),\n"
                         + "stockMovementTypeName VARCHAR(255),\n"
                         + "stockMovementTypeIncrease INTEGER(2),\n"
                         + "stockMovementTypePrefix VARCHAR(255),\n"
-                        + "stockMovementTypeActive INTEGER(1)\n"
+                        + "stockMovementTypeActive INTEGER(1) DEFAULT 1\n"
                         + ")");
             }
 
@@ -220,6 +221,8 @@ public class DatabaseHandler {
                         + "stockMovementItemId INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                         + "stockMovementId INTEGER,\n"
                         + "partId INTEGER,\n"
+                        + "stockMovementItemNew INTEGER,\n"
+                        + "stockMovementItemGood INTEGER,\n"
                         + "stockMovementItemQuntity INTEGER\n"
                         + ")");
             }
@@ -250,7 +253,7 @@ public class DatabaseHandler {
         } catch (SQLException ex) {
         }
     }
-
+    
     public ResultSet execQuery(String query) {
         ResultSet result;
         try {

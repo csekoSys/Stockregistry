@@ -3,10 +3,14 @@ package csekosys.stockregistry.database;
 import csekosys.stockregistry.data.model.CashregisterType;
 import csekosys.stockregistry.data.model.Part;
 import csekosys.stockregistry.data.model.PartCategory;
+import csekosys.stockregistry.data.model.Partner;
+import csekosys.stockregistry.data.model.StockMovement;
+import csekosys.stockregistry.data.model.StockMovementType;
 import csekosys.stockregistry.tools.DialogMaker;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -46,7 +50,7 @@ public class DatabaseHelper {
                 String comment = rs.getString("partComment");
                 boolean active = rs.getBoolean("partActive");
 
-                list.add(new Part(id, partCategoryId, name, barcode, place, comment,active));
+                list.add(new Part(id, partCategoryId, name, barcode, place, comment, active));
             }
             return list;
         } catch (SQLException ex) {
@@ -68,7 +72,7 @@ public class DatabaseHelper {
                 String comment = rs.getString("partCategoryComment");
                 boolean active = rs.getBoolean("partCategoryActive");
 
-                list.add(new PartCategory(id, name, comment,active));
+                list.add(new PartCategory(id, name, comment, active));
             }
             return list;
         } catch (SQLException ex) {
@@ -76,7 +80,84 @@ public class DatabaseHelper {
             return null;
         }
     }
-/*
+
+    public static ObservableList<StockMovementType> findAllStockMovementTypes() {
+        ObservableList<StockMovementType> list = FXCollections.observableArrayList();
+
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        String query = "SELECT * FROM stockMovementTypes";
+        ResultSet rs = databaseHandler.execQuery(query);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("stockMovementTypeId");
+                boolean newPart = rs.getBoolean("stockMovementTypeNewPart");
+                boolean goodPart = rs.getBoolean("stockMovementTypeGoodPart");
+                String name = rs.getString("stockMovementTypeName");
+                boolean increase = rs.getBoolean("stockMovementTypeIncrease");
+                String prefix = rs.getString("stockMovementTypePrefix");
+                boolean active = rs.getBoolean("stockMovementTypeActive");
+
+                list.add(new StockMovementType(id, newPart, goodPart, name, increase, prefix, active));
+            }
+            return list;
+        } catch (SQLException ex) {
+            DialogMaker.showErrorAlert("Hiba", "Az alkatrész típusok listába írása nem sikerült", ex.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static ObservableList<Partner> findAllPartners() {
+        ObservableList<Partner> list = FXCollections.observableArrayList();
+
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        String query = "SELECT * FROM partners";
+        ResultSet rs = databaseHandler.execQuery(query);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("partnerId");
+                String name = rs.getString("partnerName");
+                String address = rs.getString("partnerAddress");
+                boolean active = rs.getBoolean("partnerActive");
+
+                list.add(new Partner(id, name, address, active));
+            }
+            return list;
+        } catch (SQLException ex) {
+            DialogMaker.showErrorAlert("Hiba", "A partnerek listába írása nem sikerült", ex.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Az utolsó Készletmozgás lekérdezése, az azonosító előtagja alapján
+     * @return 
+     */
+    public static StockMovement getLastStockMovement(String prefix) {
+        StockMovement lastStockMovement = null;
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+
+        String query = "SELECT MAX(stockMovementId) FROM stockMovements WHERE stockMovementIdentification LIKE '" + prefix + "_____________'";
+        ResultSet rs = databaseHandler.execQuery(query);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("stockMovementId");
+                String identification = rs.getString("stockMovementIdentification");
+                int partnerId = rs.getInt("partnerId");
+                int stockMovementTypeId = rs.getInt("stockMovementTypeId");
+                String transfering = rs.getString("stockMovementTransfering");
+                String recipient = rs.getString("stockMovementRecipient");
+                String comment = rs.getString("stockMovementComment");
+                Date timestamp = rs.getDate("stockMovementDate");
+
+                lastStockMovement = new StockMovement(id, identification, partnerId, stockMovementTypeId, transfering, recipient, comment, (java.sql.Date) timestamp);
+            }
+            return lastStockMovement;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+
+    /*
     public static PartCategory getOnePartCategory(int partCategoryId) {
         PartCategory partCategory = null;
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
@@ -96,7 +177,7 @@ public class DatabaseHelper {
         }
         return partCategory;
     }
-*/
+     */
     public static ObservableList<CashregisterType> findAllCashregisterTypes() {
         ObservableList<CashregisterType> list = FXCollections.observableArrayList();
 
