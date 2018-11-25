@@ -130,7 +130,8 @@ public class DatabaseHelper {
 
     /**
      * Az utolsó Készletmozgás lekérdezése, az azonosító előtagja alapján
-     * @return 
+     *
+     * @return
      */
     public static StockMovement getLastStockMovement(String prefix) {
         StockMovement lastStockMovement = null;
@@ -155,6 +156,33 @@ public class DatabaseHelper {
         } catch (SQLException ex) {
             return null;
         }
+    }
+
+    public static ObservableList<Part> selecktStockMovementPartList() {
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        ObservableList<Part> list = FXCollections.observableArrayList();
+
+        String query = "SELECT parts.partId, parts.partName, partCategories.partCategoryName "
+                + "FROM parts "
+                + "INNER JOIN partCategories "
+                + "ON parts.partCategoryId=partCategories.partCategoryId";
+
+        ResultSet rs = databaseHandler.execQuery(query);
+        
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("partId");
+                String name = rs.getString("partName");
+                String partCategoryName = rs.getString("partCategoryName");
+
+                list.add(new Part(id, partCategoryName, name, "", "", "", true));
+            }
+            return list;
+        } catch (SQLException ex) {
+            DialogMaker.showErrorAlert("Hiba", "Az alkatrészek listába írása nem sikerült", ex.getLocalizedMessage());
+            return null;
+        }
+
     }
 
     /*

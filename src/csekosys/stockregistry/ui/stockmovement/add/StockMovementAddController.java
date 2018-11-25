@@ -28,14 +28,18 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class StockMovementAddController implements Initializable {
 
     private DatabaseHandler databaseHandler;
     private ObservableList<Partner> partnersList = FXCollections.observableArrayList();
     private ObservableList<StockMovementType> stockMovementTypesList = FXCollections.observableArrayList();
+    private ObservableList<Part> partList = FXCollections.observableArrayList();
+
     SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat identificationDateFormat = new SimpleDateFormat("yyyyMMdd");
     @FXML
@@ -58,8 +62,6 @@ public class StockMovementAddController implements Initializable {
     private TableColumn<Part, String> partNameCol;
     @FXML
     private TableColumn<PartCategory, String> cashregisterTypeCol;
-    @FXML
-    private TableColumn<Integer, Integer> quantityCol;
     @FXML
     private TableColumn<String, String> partFunctionsCol;
     @FXML
@@ -90,8 +92,10 @@ public class StockMovementAddController implements Initializable {
 
         System.out.println("timestamp: " + timestampFormat.format(data));
         System.out.println("identification: " + identificationDateFormat.format(data));
-        
-        initIdentification();
+
+        initPartsTable();
+
+//        initIdentification();
     }
 
     @FXML
@@ -116,6 +120,7 @@ public class StockMovementAddController implements Initializable {
 
     @FXML
     private void handleCancelAction(ActionEvent event) {
+        cancel();
     }
 
     private void initPartnersComboBox() {
@@ -128,15 +133,20 @@ public class StockMovementAddController implements Initializable {
         stockMovementTypeComboBox.setItems(stockMovementTypesList);
     }
 
+    private void cancel() {
+        Stage stage = (Stage) stockMovementPane.getScene().getWindow();
+        stage.close();
+    }
+
     private void initIdentification() {
         String prefix = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getPrefix();
         StockMovement lastStockMovement = DatabaseHelper.getLastStockMovement(prefix);
-        
+
         System.out.println("csekosys.stockregistry.ui.stockmovement.add.StockMovementAddController.initIdentification(): " + lastStockMovement);
-        
-        if(lastStockMovement == null) {
-            
-        } else {           
+
+        if (lastStockMovement == null) {
+
+        } else {
             String identification = lastStockMovement.getIdentification();
             String[] parts = identification.split("-");
             String identificationPrefix = parts[0];
@@ -145,6 +155,24 @@ public class StockMovementAddController implements Initializable {
         }
     }
 
+    private void initPartsTable() {
+        partList.clear();
+        partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        cashregisterTypeCol.setCellValueFactory(new PropertyValueFactory<>("partCategoryName"));
+        partList = DatabaseHelper.selecktStockMovementPartList();
+        partListTable.setItems(partList);
+        
+        partListTable.getSelectionModel().
+    }
 
+    private void selectPartInTable() {
+        Part selecktedPart = partListTable.getSelectionModel().getSelectedItem();
+
+        if (selecktedPart == null) {
+            System.out.println("csekosys.stockregistry.ui.stockmovement.add.StockMovementAddController.selectPartInTable()" + " Nincs kiválasztva alkatrész!");
+        } else {
+            chosenPartNameLabel.setText(selecktedPart.getName());
+        }
+    }
 
 }
