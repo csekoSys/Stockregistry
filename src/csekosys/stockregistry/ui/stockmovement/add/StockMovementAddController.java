@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +41,7 @@ public class StockMovementAddController implements Initializable {
     private ObservableList<Partner> partnersList = FXCollections.observableArrayList();
     private ObservableList<StockMovementType> stockMovementTypesList = FXCollections.observableArrayList();
     private ObservableList<Part> partList = FXCollections.observableArrayList();
+    private ObservableList<StockMovementItem> itemList = FXCollections.observableArrayList();
 
     SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat identificationDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -81,21 +84,14 @@ public class StockMovementAddController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Date data = new Date();
-
         databaseHandler = DatabaseHandler.getInstance();
+        Date data = new Date();
+        addQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000));
 
         initStockMovementTypesComboBox();
         initPartnersComboBox();
 
-        addQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000));
-
-        System.out.println("timestamp: " + timestampFormat.format(data));
-        System.out.println("identification: " + identificationDateFormat.format(data));
-
-        initPartsTable();
-
-//        initIdentification();
+        test();
     }
 
     @FXML
@@ -112,6 +108,7 @@ public class StockMovementAddController implements Initializable {
 
     @FXML
     private void handleAddItemAction(ActionEvent event) {
+
     }
 
     @FXML
@@ -121,6 +118,34 @@ public class StockMovementAddController implements Initializable {
     @FXML
     private void handleCancelAction(ActionEvent event) {
         cancel();
+    }
+
+    private void testItemList() {
+        itemList.clear();
+        itemNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        itemCashregisterTypeCol.setCellValueFactory(new PropertyValueFactory<>("partCategoryName"));
+        itemQuantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+    }
+
+    private void test() {
+        int strockMovementId;
+        int partId;
+        int newItem;
+        int goodItem;
+        int quantity;
+
+        partList.clear();
+        partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        cashregisterTypeCol.setCellValueFactory(new PropertyValueFactory<>("partCategoryName"));
+        partList = DatabaseHelper.selecktStockMovementPartList();
+        partListTable.setItems(partList);
+
+        partListTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                chosenPartNameLabel.setText(newSelection.getName());
+            }
+        });
+
     }
 
     private void initPartnersComboBox() {
@@ -161,8 +186,7 @@ public class StockMovementAddController implements Initializable {
         cashregisterTypeCol.setCellValueFactory(new PropertyValueFactory<>("partCategoryName"));
         partList = DatabaseHelper.selecktStockMovementPartList();
         partListTable.setItems(partList);
-        
-        partListTable.getSelectionModel().
+
     }
 
     private void selectPartInTable() {
