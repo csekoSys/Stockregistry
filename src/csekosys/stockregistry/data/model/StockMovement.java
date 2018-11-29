@@ -11,9 +11,9 @@ public class StockMovement {
     private String transfering;
     private String recipient;
     private String comment;
-    private Date date;
+    private String date;
 
-    public StockMovement(int id, String identification, int partnerId, int stockMovementTypeId, String transfering, String recipient, String comment, Date date) {
+    public StockMovement(int id, String identification, int partnerId, int stockMovementTypeId, String transfering, String recipient, String comment, String date) {
         this.id = id;
         this.identification = identification;
         this.partnerId = partnerId;
@@ -24,7 +24,7 @@ public class StockMovement {
         this.date = date;
     }
 
-    public StockMovement(String identification, int partnerId, int stockMovementTypeId, String transfering, String recipient, String comment, Date date) {
+    public StockMovement(String identification, int partnerId, int stockMovementTypeId, String transfering, String recipient, String comment, String date) {
         this.identification = identification;
         this.partnerId = partnerId;
         this.stockMovementTypeId = stockMovementTypeId;
@@ -90,11 +90,11 @@ public class StockMovement {
         this.comment = comment;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
     

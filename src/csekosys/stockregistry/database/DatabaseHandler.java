@@ -198,7 +198,7 @@ public class DatabaseHandler {
                         + "stockMovementTransfering VARCHAR(255),\n"
                         + "stockMovementRecipient VARCHAR(255),\n"
                         + "stockMovementComment VARCHAR(255),\n"
-                        + "stockMovementDate DATETIME\n"
+                        + "stockMovementDate VARCHAR(255)\n"
                         + ")");
             }
 

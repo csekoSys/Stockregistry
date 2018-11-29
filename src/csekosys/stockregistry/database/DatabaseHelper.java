@@ -5,6 +5,7 @@ import csekosys.stockregistry.data.model.Part;
 import csekosys.stockregistry.data.model.PartCategory;
 import csekosys.stockregistry.data.model.Partner;
 import csekosys.stockregistry.data.model.StockMovement;
+import csekosys.stockregistry.data.model.StockMovementItem;
 import csekosys.stockregistry.data.model.StockMovementType;
 import csekosys.stockregistry.tools.DialogMaker;
 import java.sql.PreparedStatement;
@@ -30,6 +31,42 @@ public class DatabaseHelper {
         } catch (SQLException ex) {
             DialogMaker.showErrorAlert("Hiba", "Az alkatrész beszúrása nem sikerült", ex.getLocalizedMessage());
             System.err.println("Hiba az alkatrész beszúrása közben: " + ex);
+        }
+        return false;
+    }
+
+    public static boolean insertStockMovement(StockMovement stockMuvement) {
+        try {
+            String sql = "INSERT INTO stockMovements(stockMovementIdentification,partnerId,stockMovementTypeId,stockMovementTransfering,stockMovementRecipient,stockMovementComment, stockMovementDate) VALUES(?,?,?,?,?,?,?)";
+            PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(sql);
+            statement.setString(1, stockMuvement.getIdentification());
+            statement.setInt(2, stockMuvement.getPartnerId());
+            statement.setInt(3, stockMuvement.getStockMovementTypeId());
+            statement.setString(4, stockMuvement.getTransfering());
+            statement.setString(5, stockMuvement.getRecipient());
+            statement.setString(6, stockMuvement.getComment());
+            statement.setString(7, stockMuvement.getDate());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            DialogMaker.showErrorAlert("Hiba", "A készletmozgás fejlécének beszúrása nem sikerült", ex.getLocalizedMessage());
+            System.err.println("A készletmozgás fejlécének beszúrása nem sikerült: " + ex);
+        }
+        return false;
+    }
+
+    public static boolean insertStockMovementItems(StockMovementItem stockMuvementItem) {
+        try {
+            String sql = "INSERT INTO stockMovementItems(stockMovementId,partId,stockMovementItemNew,stockMovementItemGood,stockMovementItemQuntity) VALUES(?,?,?,?,?)";
+            PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(sql);
+            statement.setInt(1, stockMuvementItem.getStrockMovementId());
+            statement.setInt(2, stockMuvementItem.getPartId());
+            statement.setInt(3, stockMuvementItem.getNewItem());
+            statement.setInt(4, stockMuvementItem.getGoodItem());
+            statement.setInt(5, stockMuvementItem.getQuantity());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            DialogMaker.showErrorAlert("Hiba", "A készletmozgás tételeinek beszúrása nem sikerült", ex.getLocalizedMessage());
+            System.err.println("A készletmozgás tételeinek beszúrása nem sikerült: " + ex);
         }
         return false;
     }
@@ -148,9 +185,9 @@ public class DatabaseHelper {
                 String transfering = rs.getString("stockMovementTransfering");
                 String recipient = rs.getString("stockMovementRecipient");
                 String comment = rs.getString("stockMovementComment");
-                Date timestamp = rs.getDate("stockMovementDate");
+                String timestamp = rs.getString("stockMovementDate");
 
-                lastStockMovement = new StockMovement(id, identification, partnerId, stockMovementTypeId, transfering, recipient, comment, (java.sql.Date) timestamp);
+                lastStockMovement = new StockMovement(id, identification, partnerId, stockMovementTypeId, transfering, recipient, comment, timestamp);
             }
             return lastStockMovement;
         } catch (SQLException ex) {
@@ -168,7 +205,7 @@ public class DatabaseHelper {
                 + "ON parts.partCategoryId=partCategories.partCategoryId";
 
         ResultSet rs = databaseHandler.execQuery(query);
-        
+
         try {
             while (rs.next()) {
                 int id = rs.getInt("partId");

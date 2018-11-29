@@ -85,17 +85,16 @@ public class StockMovementAddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         databaseHandler = DatabaseHandler.getInstance();
-        Date data = new Date();
-        addQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000));
+        Date date= new Date();
+        addQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000));
 
         initStockMovementTypesComboBox();
         initPartnersComboBox();
-
-        test();
     }
 
     @FXML
     private void handleAddStockMovementAction(ActionEvent event) {
+        testStockMovementSave();
     }
 
     @FXML
@@ -127,12 +126,43 @@ public class StockMovementAddController implements Initializable {
         itemQuantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
-    private void test() {
-        int strockMovementId;
-        int partId;
-        int newItem;
-        int goodItem;
-        int quantity;
+    private void testStockMovementSave() {
+        int stockMovementTypeId = 1;
+        String stockMovementTypePrefix = "TTT";
+        String identification = initIdentification(stockMovementTypePrefix);
+        Date dateX = new Date();
+        String stockMovementcereatedDate = timestampFormat.format(dateX);
+        
+        boolean newItem = true;
+        boolean goodItem = true;
+        int partId = 1;
+        String comment = "comment 1";
+        String transfering = "test átadó";
+        String recipient = "teszt átvevő";    
+        
+        for (int i = 0; i < 10; i++) {
+            itemList.add(new StockMovementItem(1, 1, 1, 1, i));
+        }
+        StockMovement stockMuvement = new StockMovement(identification, partId, stockMovementTypeId, transfering, recipient, comment, stockMovementcereatedDate);       
+        DatabaseHelper.insertStockMovement(stockMuvement);
+        
+        for (StockMovementItem item : itemList) {
+            DatabaseHelper.insertStockMovementItems(item);
+        }
+        
+    }
+    
+    private void testSave() {
+        int stockMovementTypeId = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getId();
+        String stockMovementTypePrefix = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getPrefix();
+        String identification = initIdentification(stockMovementTypePrefix);
+        
+        boolean newItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isNewPart();
+        boolean goodItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isGoodPart();
+        int partId = partnerComboBox.getSelectionModel().getSelectedItem().getId();
+        String comment = commentTextArea.getText();
+        String transfering = transferringTextField.getText();
+        String recipient = recipientTextField.getText();
 
         partList.clear();
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -143,6 +173,9 @@ public class StockMovementAddController implements Initializable {
         partListTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 chosenPartNameLabel.setText(newSelection.getName());
+                int selecktedItemId = newSelection.getId();
+                String selecktedItemName = newSelection.getName();
+                int partCategoryId = newSelection.getPartCategoryId();
             }
         });
 
@@ -163,21 +196,8 @@ public class StockMovementAddController implements Initializable {
         stage.close();
     }
 
-    private void initIdentification() {
-        String prefix = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getPrefix();
-        StockMovement lastStockMovement = DatabaseHelper.getLastStockMovement(prefix);
-
-        System.out.println("csekosys.stockregistry.ui.stockmovement.add.StockMovementAddController.initIdentification(): " + lastStockMovement);
-
-        if (lastStockMovement == null) {
-
-        } else {
-            String identification = lastStockMovement.getIdentification();
-            String[] parts = identification.split("-");
-            String identificationPrefix = parts[0];
-            String identificationDate = parts[1];
-            String identificationCount = parts[2];
-        }
+    private String initIdentification(String prefix) {
+        return prefix + "-20181129-001";
     }
 
     private void initPartsTable() {
@@ -187,16 +207,6 @@ public class StockMovementAddController implements Initializable {
         partList = DatabaseHelper.selecktStockMovementPartList();
         partListTable.setItems(partList);
 
-    }
-
-    private void selectPartInTable() {
-        Part selecktedPart = partListTable.getSelectionModel().getSelectedItem();
-
-        if (selecktedPart == null) {
-            System.out.println("csekosys.stockregistry.ui.stockmovement.add.StockMovementAddController.selectPartInTable()" + " Nincs kiválasztva alkatrész!");
-        } else {
-            chosenPartNameLabel.setText(selecktedPart.getName());
-        }
     }
 
 }
