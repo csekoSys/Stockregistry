@@ -85,7 +85,7 @@ public class StockMovementAddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         databaseHandler = DatabaseHandler.getInstance();
-        Date date= new Date();
+        Date date = new Date();
         addQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000));
 
         initStockMovementTypesComboBox();
@@ -127,36 +127,50 @@ public class StockMovementAddController implements Initializable {
     }
 
     private void testStockMovementSave() {
-        int stockMovementTypeId = 1;
-        String stockMovementTypePrefix = "TTT";
-        String identification = initIdentification(stockMovementTypePrefix);
-        Date dateX = new Date();
-        String stockMovementcereatedDate = timestampFormat.format(dateX);
-        
-        boolean newItem = true;
-        boolean goodItem = true;
-        int partId = 1;
-        String comment = "comment 1";
-        String transfering = "test átadó";
-        String recipient = "teszt átvevő";    
-        
-        for (int i = 0; i < 10; i++) {
-            itemList.add(new StockMovementItem(1, 1, 1, 1, i));
+
+        boolean isSelecktedStockMovementType = stockMovementTypeComboBox.getSelectionModel().isEmpty();
+        boolean isPartner = partnerComboBox.getSelectionModel().isEmpty();
+        boolean isTransfering = transferringTextField.getText().isEmpty();
+        boolean isRecipient = recipientTextField.getText().isEmpty();
+
+        boolean flag = isSelecktedStockMovementType && isPartner && isTransfering && isRecipient;
+
+        if (!flag) {
+            int stockMovementTypeId = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getId();
+            String stockMovementTypePrefix = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getPrefix();
+            String identification = initIdentification(stockMovementTypePrefix);
+            int partnerId = partnerComboBox.getSelectionModel().getSelectedItem().getId();
+            boolean newItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isNewPart();
+            boolean goodItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isGoodPart();
+            String comment = commentTextArea.getText();
+            String transfering = transferringTextField.getText();
+            String recipient = recipientTextField.getText();
+
+            Date dateX = new Date();
+            String stockMovementcereatedDate = timestampFormat.format(dateX);
+
+            StockMovement stockMuvement = new StockMovement(identification, partnerId, stockMovementTypeId, transfering, recipient, comment, stockMovementcereatedDate);
+            DatabaseHelper.insertStockMovement(stockMuvement);
+
+        } else {
+            DialogMaker.showErrorAlert("Hiba", null, "Minden * jelölt mező kitöltése kötelező!");
         }
-        StockMovement stockMuvement = new StockMovement(identification, partId, stockMovementTypeId, transfering, recipient, comment, stockMovementcereatedDate);       
-        DatabaseHelper.insertStockMovement(stockMuvement);
-        
+
+        for (int i = 0; i < 1; i++) {
+            itemList.add(new StockMovementItem(1, 1, 1, 1, 10));
+        }
+
         for (StockMovementItem item : itemList) {
             DatabaseHelper.insertStockMovementItems(item);
         }
-        
+
     }
-    
+
     private void testSave() {
         int stockMovementTypeId = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getId();
         String stockMovementTypePrefix = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getPrefix();
         String identification = initIdentification(stockMovementTypePrefix);
-        
+
         boolean newItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isNewPart();
         boolean goodItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isGoodPart();
         int partId = partnerComboBox.getSelectionModel().getSelectedItem().getId();
@@ -196,8 +210,50 @@ public class StockMovementAddController implements Initializable {
         stage.close();
     }
 
+    /**
+     * Megkeresi az utolsó egyező prefix-ű azonosítót az adott napon és növeli a
+     * számlálót vagy újat hoz létre
+     *
+     * @param prefix
+     * @return
+     */
     private String initIdentification(String prefix) {
-        return prefix + "-20181129-001";
+        StockMovement lastStockMovement = DatabaseHelper.getLastStockMovement(prefix);
+
+        System.out.println("csekosys.stockregistry.ui.stockmovement.add.StockMovementAddController.initIdentification()");
+        System.out.println("prefix: " + prefix);
+        System.out.println("lastStockMovement: " + lastStockMovement);
+
+        Date dateNow = new Date();
+        String identificationDateNow = identificationDateFormat.format(dateNow);
+
+        String newIdentification;
+
+        if (lastStockMovement == null) {
+            newIdentification = prefix + "-" + identificationDateNow + "-" + "001";
+        } else {
+            String identification = lastStockMovement.getIdentification();
+            String[] parts = identification.split("-");
+            String identificationPrefix = parts[0];
+            String identificationDate = parts[1];
+            String identificationCount = parts[2];
+
+            if (identificationDateNow.equals(identificationDate)) {
+                int identificationCountInt = Integer.parseInt(identificationCount);
+
+                if (identificationCountInt < 10) {
+                    newIdentification = prefix + "-" + identificationDate + "-00" + (identificationCountInt + 1);
+                } else if (identificationCountInt < 100) {
+                    newIdentification = prefix + "-" + identificationDate + "-0" + (identificationCountInt + 1);
+                } else {
+                    newIdentification = prefix + "-" + identificationDate + "-" + (identificationCountInt + 1);
+                }
+            } else {
+                newIdentification = newIdentification = prefix + "-" + identificationDateNow + "-" + "001";
+            }
+        }
+
+        return newIdentification;
     }
 
     private void initPartsTable() {
@@ -206,7 +262,6 @@ public class StockMovementAddController implements Initializable {
         cashregisterTypeCol.setCellValueFactory(new PropertyValueFactory<>("partCategoryName"));
         partList = DatabaseHelper.selecktStockMovementPartList();
         partListTable.setItems(partList);
-
     }
 
 }

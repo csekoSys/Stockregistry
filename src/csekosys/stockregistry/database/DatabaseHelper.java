@@ -11,7 +11,6 @@ import csekosys.stockregistry.tools.DialogMaker;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -174,7 +173,8 @@ public class DatabaseHelper {
         StockMovement lastStockMovement = null;
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
 
-        String query = "SELECT MAX(stockMovementId) FROM stockMovements WHERE stockMovementIdentification LIKE '" + prefix + "_____________'";
+//        String query = "SELECT MAX(stockMovementId) FROM stockMovements WHERE stockMovementIdentification LIKE '" + prefix + "_____________'";
+        String query = "SELECT MAX(stockMovementId) FROM stockMovements WHERE stockMovementIdentification LIKE 'HJB%'";
         ResultSet rs = databaseHandler.execQuery(query);
         try {
             while (rs.next()) {

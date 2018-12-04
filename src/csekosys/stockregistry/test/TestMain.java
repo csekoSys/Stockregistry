@@ -8,8 +8,9 @@ import java.util.Date;
 public class TestMain {
 
     public static void main(String[] args) {
+        
+        System.out.println("lastStockMovement: " + DatabaseHelper.getLastStockMovement("HJB"));
 
-        initIdentification();
     }
 
     private static void initIdentification() {
