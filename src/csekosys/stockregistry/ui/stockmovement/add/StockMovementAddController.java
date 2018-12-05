@@ -138,7 +138,7 @@ public class StockMovementAddController implements Initializable {
         if (!flag) {
             int stockMovementTypeId = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getId();
             String stockMovementTypePrefix = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getPrefix();
-            String identification = initIdentification(stockMovementTypePrefix);
+            String identification = createdIdentification(stockMovementTypePrefix);
             int partnerId = partnerComboBox.getSelectionModel().getSelectedItem().getId();
             boolean newItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isNewPart();
             boolean goodItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isGoodPart();
@@ -169,7 +169,7 @@ public class StockMovementAddController implements Initializable {
     private void testSave() {
         int stockMovementTypeId = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getId();
         String stockMovementTypePrefix = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().getPrefix();
-        String identification = initIdentification(stockMovementTypePrefix);
+        String identification = createdIdentification(stockMovementTypePrefix);
 
         boolean newItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isNewPart();
         boolean goodItem = stockMovementTypeComboBox.getSelectionModel().getSelectedItem().isGoodPart();
@@ -217,8 +217,8 @@ public class StockMovementAddController implements Initializable {
      * @param prefix
      * @return
      */
-    private String initIdentification(String prefix) {
-        StockMovement lastStockMovement = DatabaseHelper.getLastStockMovement(prefix);
+    private String createdIdentification(String prefix) {
+        String lastStockMovement = DatabaseHelper.getLastStockMovementIdentification(prefix);
 
         System.out.println("csekosys.stockregistry.ui.stockmovement.add.StockMovementAddController.initIdentification()");
         System.out.println("prefix: " + prefix);
@@ -227,12 +227,12 @@ public class StockMovementAddController implements Initializable {
         Date dateNow = new Date();
         String identificationDateNow = identificationDateFormat.format(dateNow);
 
-        String newIdentification;
+        String newIdentification = "";
 
-        if (lastStockMovement == null) {
+        if (lastStockMovement == "" || lastStockMovement.isEmpty()) {
             newIdentification = prefix + "-" + identificationDateNow + "-" + "001";
         } else {
-            String identification = lastStockMovement.getIdentification();
+            String identification = lastStockMovement;
             String[] parts = identification.split("-");
             String identificationPrefix = parts[0];
             String identificationDate = parts[1];
@@ -249,11 +249,12 @@ public class StockMovementAddController implements Initializable {
                     newIdentification = prefix + "-" + identificationDate + "-" + (identificationCountInt + 1);
                 }
             } else {
-                newIdentification = newIdentification = prefix + "-" + identificationDateNow + "-" + "001";
+                newIdentification = prefix + "-" + identificationDateNow + "-" + "001";
             }
-        }
 
+        }
         return newIdentification;
+
     }
 
     private void initPartsTable() {

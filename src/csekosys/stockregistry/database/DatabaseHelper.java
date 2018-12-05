@@ -164,35 +164,23 @@ public class DatabaseHelper {
         }
     }
 
-    /**
-     * Az utolsó Készletmozgás lekérdezése, az azonosító előtagja alapján
-     *
-     * @return
-     */
-    public static StockMovement getLastStockMovement(String prefix) {
-        StockMovement lastStockMovement = null;
+    public static String getLastStockMovementIdentification(String prefix) {
+        String lastIdentification = "";
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
 
-//        String query = "SELECT MAX(stockMovementId) FROM stockMovements WHERE stockMovementIdentification LIKE '" + prefix + "_____________'";
-        String query = "SELECT MAX(stockMovementId) FROM stockMovements WHERE stockMovementIdentification LIKE 'HJB%'";
+        String query = "SELECT MAX(stockMovementIdentification) stockMovementIdentification FROM stockMovements WHERE stockMovementIdentification LIKE '" + prefix + "%'";
+
         ResultSet rs = databaseHandler.execQuery(query);
+
         try {
             while (rs.next()) {
-                int id = rs.getInt("stockMovementId");
-                String identification = rs.getString("stockMovementIdentification");
-                int partnerId = rs.getInt("partnerId");
-                int stockMovementTypeId = rs.getInt("stockMovementTypeId");
-                String transfering = rs.getString("stockMovementTransfering");
-                String recipient = rs.getString("stockMovementRecipient");
-                String comment = rs.getString("stockMovementComment");
-                String timestamp = rs.getString("stockMovementDate");
-
-                lastStockMovement = new StockMovement(id, identification, partnerId, stockMovementTypeId, transfering, recipient, comment, timestamp);
+                lastIdentification = rs.getString("stockMovementIdentification");
+                System.out.println("Találat: " + lastIdentification);
             }
-            return lastStockMovement;
         } catch (SQLException ex) {
-            return null;
+            System.err.println("Hiba: " + ex);
         }
+        return lastIdentification;
     }
 
     public static ObservableList<Part> selecktStockMovementPartList() {

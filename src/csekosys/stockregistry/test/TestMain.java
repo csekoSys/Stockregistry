@@ -1,15 +1,38 @@
 package csekosys.stockregistry.test;
 
 import csekosys.stockregistry.data.model.StockMovement;
-import csekosys.stockregistry.database.DatabaseHelper;
+import csekosys.stockregistry.database.DatabaseHandler;
+import csekosys.stockregistry.tools.DialogMaker;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 public class TestMain {
 
     public static void main(String[] args) {
-        
-        System.out.println("lastStockMovement: " + DatabaseHelper.getLastStockMovement("HJB"));
+
+        identification();
+
+    }
+
+    private static void identification() {
+        String newIdentification = "";
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+
+        String query = "SELECT MAX(stockMovementIdentification) stockMovementIdentification FROM stockMovements WHERE stockMovementIdentification LIKE 'HJB%'";
+
+        ResultSet rs = databaseHandler.execQuery(query);
+
+        try {
+            while (rs.next()) { 
+                newIdentification = rs.getString("stockMovementIdentification");
+                System.out.println("Találat: " + newIdentification);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Hiba: " + ex);
+        }
 
     }
 
